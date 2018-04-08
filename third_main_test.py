@@ -6,6 +6,9 @@ import matplotlib.pyplot as plt
 from scipy.io import wavfile
 from scipy import signal
 import numpy as np
+from skimage import io, filters, measure
+
+
 
 def pad_audio_front_n_back(data, fs, time_ms ):
     shape = data.shape
@@ -103,9 +106,9 @@ rate, data = wavfile.read(file_wav)
 print np.shape(data)
 #data = pad_audio_front_n_back(data,rate,2)
 
-data = pad_audio(data,rate,2,FRONT)
+#data = pad_audio(data,rate,2,FRONT)
 
-data = pad_audio(data,rate,3,BACK)
+#data = pad_audio(data,rate,3,BACK)
 #print np.shape(data)
 #print rate #rate 250 for all the files???
 #print np.shape(rate)
@@ -142,9 +145,24 @@ Sxx : ndarray
 #print data[100]
 
 """plot it"""
-plt.axis('on')
-plt.ylabel("Frequency [kHz]")
-plt.xlabel("Time [ms]")
-plt.show()
+#plt.axis('on')
+#plt.ylabel("Frequency [kHz]")
+#plt.xlabel("Time [ms]")
+#plt.show()
 #plt.savefig('T0000223-3.png', dpi=100,frameon='false', aspect='normal', bbox_inches='tight', pad_inches=0)  # Spectrogram saved as a .png
 
+#denoised_img = denoise_wavelet(pxx)
+#edges = filters.sobel(pxx)
+contours = measure.find_contours(pxx,15 )
+#io.imshow(contours)
+#io.show()
+
+
+fig, ax = plt.subplots()
+ax.imshow(pxx)
+for n, contour in enumerate(contours):
+    ax.plot(contour[:,1], contour[:,0], linewidth=2)
+ax.axis('image')
+ax.set_xticks([])
+ax.set_yticks([])
+plt.show()
